@@ -1,15 +1,6 @@
 import requests
 import subprocess
 
-#Cargar la biblioteca compartida
-#lib_conversion = ctypes.CDLL('./libasm.so')
-
-#Definir la firma de la funcion de conversion
-#lib_conversion.conversion_a_pesos.restype = ctypes.c_double
-#lib_conversion.conversion_a_pesos.argtypes = [ctypes.c_double]
-
-#lib_conversion.sumaAsm.restype = ctypes.c_double
-#lib_conversion.sumaAsm.argtypes = [ctypes.c_double, ctypes.c_double]
 
 ### API REQUEST ###
 url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
