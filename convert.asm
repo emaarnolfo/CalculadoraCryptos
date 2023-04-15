@@ -4,11 +4,12 @@ global calc
 calc:
     enter 0, 0
     ;pusha
-    mov ebp, esp        ; establecer un nuevo puntero de pila
 
-    mov  eax, [ebp+12]
-    imul eax, [ebp+8]
+    fld qword [ebp+8]       ; cargar el primer número en el registro ST0
+    fld qword [ebp+16]      ; cargar el segundo número en el registro ST1
+    fmul st1, st0           ; multiplicar los dos números (el resultado queda en ST0)
+    fstp qword [ebp+8]      ; mover el resultado a la variable de retorno
 
     ;popa
     leave
-    ret                 ; retornar
+    ret                     ; retornar

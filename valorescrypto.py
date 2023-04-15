@@ -11,7 +11,7 @@ import subprocess
 #lib_conversion.sumaAsm.restype = ctypes.c_double
 #lib_conversion.sumaAsm.argtypes = [ctypes.c_double, ctypes.c_double]
 
-
+### API REQUEST ###
 url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
 headers = {
   'Accepts': 'application/json',
@@ -25,10 +25,13 @@ response = requests.get(url, headers=headers, params=params)
 
 data = response.json()['data']
 
-#Obtener los precios de BTC y ETH de la respuesta de la API
+prices_array = []
+
+### PRICES REQUEST ###
+
+# Solicitar los precios en USD de BTC y ETH
 btc_price_dolar = data['BTC']['quote']['USD']['price']
 eth_price_dolar = data['ETH']['quote']['USD']['price']
-
 
 
 # Solicitar precios de BTC y ETH en EUR
@@ -45,6 +48,7 @@ data_eur = response_eur.json()['data']
 btc_price_eur = data_eur['BTC']['quote']['EUR']['price']
 eth_price_eur = data_eur['ETH']['quote']['EUR']['price']
 
+
 # Solicitar precios de BTC y ETH en ARS
 params_ars = {
   'symbol': 'BTC,ETH',
@@ -59,49 +63,72 @@ data_ars = response_ars.json()['data']
 btc_price_ars = data_ars['BTC']['quote']['ARS']['price']
 eth_price_ars = data_ars['ETH']['quote']['ARS']['price']
 
-#Convertir el valor a pesos
-#btc_price_pesos = lib_conversion.conversion_a_pesos(btc_price)
-#eth_price_pesos = lib_conversion.conversion_a_pesos(eth_price)
 
-#Precios de las criptomonedas en Dolar
+# Precios de las criptomonedas en Dolar
 print(f"Obteniendo datos de la API de CoinMarket:")
 print(f"El precio de BTC es {round(btc_price_dolar, 2)} USD")
 print(f"El precio de ETH es {round(eth_price_dolar, 2)} USD\n")
 
+# Precios de las criptomonedas en Euros
 print(f"El precio de BTC es {round(btc_price_eur, 2)} EUR")
 print(f"El precio de ETH es {round(eth_price_eur, 2)} EUR\n")
 
+# Precios de las criptomonedas en Pesos Argentinos
 print(f"El precio de BTC es {round(btc_price_ars, 2)} pesos")
 print(f"El precio de BTC es {round(eth_price_ars, 2)} pesos\n")
 
-#tot_price_dolar = lib_conversion.sumaAsm(eth_price, btc_price)
+# Acomodar en el arreglo BTC y ETH: [[btc], [eth]]
+prices_array = [[btc_price_dolar, btc_price_eur, btc_price_ars], 
+                [eth_price_dolar, eth_price_eur, eth_price_ars]]
 
-#print(f"El precio de la suma de ambas monedas es {tot_price_dolar} dolares")
+#moneda = str(int(btc_price_dolar))
 
 
-moneda = str(int(btc_price_dolar))
+def crypto_converter(crypto_type):
+  
+  print("Ingrese el tipo de conversión que desea realizar")
+  moneda = input("Las opciones son: 'USD', 'EUR', 'ARS': ")
+
+  if(moneda.upper() == "USD"):
+    n = input("Ingrese cuánto quiere convertir a USD: ")
+    moneda = str(int(prices_array[crypto_type][0]))
+        
+  elif(moneda.upper() == "EUR"):
+    n = input("Ingrese cuánto quiere convertir a Euro: ")
+    moneda = str(int(prices_array[crypto_type][1]))
+    
+  elif(moneda.upper() == "ARS"):
+    n = input("Ingrese cuánto quiere convertir a pesos argentinos: ")
+    moneda = str(int(prices_array[crypto_type][2]))
+      
+
+  return n, moneda
+
+
+crypto_type = 0
+
 
 while True:
   # Leer la entrada del usuario
   print("Ingrese que moneda quiere convertir. (o escriba 'quit' para salir): ")
-  moneda = input("Las opciones son: 'USD', 'EUR', 'ARS': ")
-
-  if moneda.lower() == 'quit':
+  crypto = input("Las opciones son BTC, ETH o quit para salir: ").lower()
+  
+  if crypto == 'quit':
     print("¡Hasta luego!")
     break
 
-  if(moneda.upper() == "USD"):
-    n = input("Ingrese cuantos btc quiere convertir a USD: ")
-    moneda = str(int(btc_price_dolar))
-        
-  if(moneda.upper() == "EUR"):
-    n = input("Ingrese cuantos btc quiere convertir a Euro: ")
-    moneda = str(int(btc_price_eur))
-    
-  if(moneda.upper() == "ARS"):
-    n = input("Ingrese cuantos btc quiere convertir a pesos argentinos: ")
-    moneda = str(int(btc_price_ars))
-      
+  if(crypto == 'btc'):
+    crypto_type = 0
+  elif(crypto == 'eth'):
+    crypto_type = 1
+  else:
+    print("Opción no válida. Por favor intente nuevamente")
+    continue
 
-  result = subprocess.run(["./build/main", moneda, n], stdout=subprocess.PIPE)
+  
+  n, conversion = crypto_converter(crypto_type)
+
+  result = subprocess.run(["./build/main", conversion, n], stdout=subprocess.PIPE)
   print(result.stdout.decode("utf-8"))
+
+  

@@ -2,7 +2,7 @@
 BUILD_DIR = ./build
 
 # Opciones de compilación para el ensamblador NASM y el compilador GCC
-NASMFLAGS = -f elf
+NASMFLAGS = -f elf32
 # Regla para construir el archivo ejecutable
 main: suma.o
 	gcc -m32 -o main ./convert.c $(BUILD_DIR)/suma.o 
