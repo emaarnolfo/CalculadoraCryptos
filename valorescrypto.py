@@ -64,14 +64,15 @@ eth_price_ars = data_ars['ETH']['quote']['ARS']['price']
 #eth_price_pesos = lib_conversion.conversion_a_pesos(eth_price)
 
 #Precios de las criptomonedas en Dolar
+print(f"Obteniendo datos de la API de CoinMarket:")
 print(f"El precio de BTC es {round(btc_price_dolar, 2)} USD")
-print(f"El precio de ETH es {round(eth_price_dolar, 2)} USD")
+print(f"El precio de ETH es {round(eth_price_dolar, 2)} USD\n")
 
 print(f"El precio de BTC es {round(btc_price_eur, 2)} EUR")
-print(f"El precio de ETH es {round(eth_price_eur, 2)} EUR")
+print(f"El precio de ETH es {round(eth_price_eur, 2)} EUR\n")
 
 print(f"El precio de BTC es {round(btc_price_ars, 2)} pesos")
-print(f"El precio de BTC es {round(eth_price_ars, 2)} pesos")
+print(f"El precio de BTC es {round(eth_price_ars, 2)} pesos\n")
 
 #tot_price_dolar = lib_conversion.sumaAsm(eth_price, btc_price)
 
@@ -80,10 +81,27 @@ print(f"El precio de BTC es {round(eth_price_ars, 2)} pesos")
 
 moneda = str(int(btc_price_dolar))
 
-# Leer la entrada del usuario
-n = str(input("Ingrese cuantos btc quiere convertir a USD: "))
+while True:
+  # Leer la entrada del usuario
+  print("Ingrese que moneda quiere convertir. (o escriba 'quit' para salir): ")
+  moneda = input("Las opciones son: 'USD', 'EUR', 'ARS': ")
 
+  if moneda.lower() == 'quit':
+    print("¡Hasta luego!")
+    break
 
-result = subprocess.run(["./main", moneda, '3'], stdout=subprocess.PIPE)
-print(result.stdout.decode("utf-8"))
+  if(moneda.upper() == "USD"):
+    n = input("Ingrese cuantos btc quiere convertir a USD: ")
+    moneda = str(int(btc_price_dolar))
+        
+  if(moneda.upper() == "EUR"):
+    n = input("Ingrese cuantos btc quiere convertir a Euro: ")
+    moneda = str(int(btc_price_eur))
+    
+  if(moneda.upper() == "ARS"):
+    n = input("Ingrese cuantos btc quiere convertir a pesos argentinos: ")
+    moneda = str(int(btc_price_ars))
+      
 
+  result = subprocess.run(["./build/main", moneda, n], stdout=subprocess.PIPE)
+  print(result.stdout.decode("utf-8"))
