@@ -1,5 +1,5 @@
-%include "asm_io.inc"
-;%include "asm_io.asm"
+%include "./src/asm_io.inc"
+
 
 
 segment .data
