@@ -120,6 +120,4 @@ while True:
   n, conversion = crypto_converter(crypto_type)
 
   result = subprocess.run(["./build/main", conversion, n], stdout=subprocess.PIPE)
-  print(result.stdout.decode("utf-8"))
-
-  
+  print(result.stdout.decode("utf-8"))  

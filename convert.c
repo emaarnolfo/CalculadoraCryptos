@@ -7,10 +7,14 @@
 
 #include "cdecl.h"
 
-extern double calc (double, double);
 
-int main(int argc, char const *argv[])  //12, euro, BTC
+double PRE_CDECL calc (double, double) POST_CDECL;
+
+int main(int argc, char const *argv[]) 
 {
+    if(argc != 3)
+        printf("Faltan argumentos");
+
     //if(argc = 4){
     double cantidad = atof(argv[1]);
     double valorBTC = atof(argv[2]);
