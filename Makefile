@@ -9,7 +9,7 @@ all: main
 
 # Regla para construir el archivo ejecutable
 main: mult.o asm_io.o
-	gcc -m32 -o ./build/main $(SRC_DIR)/convert.c $(BUILD_DIR)/mult.o $(BUILD_DIR)/asm_io.o
+	gcc -m32 -g -o ./build/main $(SRC_DIR)/convert.c $(BUILD_DIR)/mult.o $(BUILD_DIR)/asm_io.o
 
 # Regla para construir el archivo objeto de la suma
 mult.o: asm_io.o
